@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from paypal.standard.conf import *
 from paypal.standard.widgets import ValueHiddenInput, ReservedValueHiddenInput
 from paypal.standard.conf import (POSTBACK_ENDPOINT, SANDBOX_POSTBACK_ENDPOINT, 
-    RECEIVER_EMAIL)
+    RECEIVER_EMAIL, BUY_BUTTON_CLASS, BUY_BUTTON_TEXT)
 
 
 # 20:18:05 Jan 30, 2009 PST - PST timezone support is not included out of the box.
@@ -98,15 +98,15 @@ class PayPalPaymentsForm(forms.Form):
     def render(self):
         return mark_safe(u"""<form action="%s" method="post">
     %s
-    <input type="image" src="%s" border="0" name="submit" alt="Buy it Now" />
-</form>""" % (POSTBACK_ENDPOINT, self.as_p(), self.get_image()))
+    %s
+</form>""" % (POSTBACK_ENDPOINT, self.as_p(), self.get_buy_button()))
         
         
     def sandbox(self):
         return mark_safe(u"""<form action="%s" method="post">
     %s
-    <input type="image" src="%s" border="0" name="submit" alt="Buy it Now" />
-</form>""" % (SANDBOX_POSTBACK_ENDPOINT, self.as_p(), self.get_image()))
+    %s
+</form>""" % (SANDBOX_POSTBACK_ENDPOINT, self.as_p(), self.get_buy_button()))
         
     def get_image(self):
         return {
@@ -115,6 +115,11 @@ class PayPalPaymentsForm(forms.Form):
             (False, True): SUBSCRIPTION_IMAGE,
             (False, False): IMAGE
         }[TEST, self.is_subscription()]
+
+    def get_buy_button(self):
+        if not BUY_BUTTON_CLASS: 
+            return '<input type="image" src="%s" border="0" name="submit" alt="Buy it Now" />' % (self.get_image(), )
+        return '<input type="submit" class="%s" value="%s" />' % (BUY_BUTTON_CLASS, BUY_BUTTON_TEXT, )
 
     def is_transaction(self):
         return self.button_type == "buy"

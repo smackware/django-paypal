@@ -19,3 +19,5 @@ IMAGE = getattr(settings, "PAYPAL_IMAGE", "http://images.paypal.com/images/x-cli
 SUBSCRIPTION_IMAGE = "https://www.paypal.com/en_US/i/btn/btn_subscribeCC_LG.gif"
 SANDBOX_IMAGE = getattr(settings, "PAYPAL_SANDBOX_IMAGE", "https://www.sandbox.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif")
 SUBSCRIPTION_SANDBOX_IMAGE = "https://www.sandbox.paypal.com/en_US/i/btn/btn_subscribeCC_LG.gif"
+BUY_BUTTON_CLASS =  getattr(settings, "PAYPAL_BUY_BUTTON_CLASS", None)
+BUY_BUTTON_TEXT  =  getattr(settings, "PAYPAL_BUY_BUTTON_TEXT", "Buy now!")
