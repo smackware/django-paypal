@@ -95,14 +95,17 @@ class PayPalPaymentsForm(forms.Form):
         super(PayPalPaymentsForm, self).__init__(*args, **kwargs)
         self.button_type = button_type
 
-    def render(self):
-        return mark_safe(u"""<form action="%s" method="post">
+    def render(self, new_window=False):
+        form_extra = ""
+        if new_window:
+            form_extra += ' target="blank"'
+        return mark_safe(u"""<form action="%s" method="post" %s>
     %s
     %s
-</form>""" % (POSTBACK_ENDPOINT, self.as_p(), self.get_buy_button()))
+</form>""" % (POSTBACK_ENDPOINT, form_extra, self.as_p(), self.get_buy_button()))
         
         
-    def sandbox(self):
+    def sandbox(self, new_window=False):
         return mark_safe(u"""<form action="%s" method="post">
     %s
     %s
